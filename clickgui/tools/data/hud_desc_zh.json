@@ -1,0 +1,22 @@
+{
+ "Displays your equipped armor.": "显示你已装备的护甲。",
+ "Shows currently enabled modules.": "显示当前已启用的模块。",
+ "Shows the number of blocks available for bridging.": "显示可用于搭路的方块数量。",
+ "Displays Minecraft's closed captions (Settings -> Accessibility Settings -> Closed Captions).": "显示 Minecraft 的隐藏式字幕（设置 -> 辅助功能设置 -> 隐藏式字幕）。",
+ "Displays the contents of your crafting grid.": "显示你的合成格内容。",
+ "Shows your active status effects.": "显示你当前激活的状态效果。",
+ "Displays your Ender Chest contents.": "显示你的末影箱内容。",
+ "Replaces the vanilla hotbar and status display.": "替换原版快捷栏与状态显示。",
+ "Displays a custom image from a URL or local file.": "显示来自 URL 或本地文件的自定义图片。",
+ "Displays your main inventory contents.": "显示你的主背包内容。",
+ "Tracks configured items in your inventory.": "统计背包中已配置的物品。",
+ "Shows active module key bindings.": "显示已启用模块的按键绑定。",
+ "Visualizes your movement key inputs.": "可视化显示你的移动按键输入。",
+ "Displays client notifications.": "显示客户端通知。",
+ "Displays the current server scoreboard.": "显示当前服务器计分板。",
+ "Provides keyboard navigation for modules.": "提供模块的键盘导航。",
+ "Displays a friendly taco.": "显示一个可爱的塔可。",
+ "Shows combat information about your current target.": "显示当前目标的战斗信息。",
+ "Displays customizable text.": "显示可自定义的文本。",
+ "Displays LiquidBounce branding and client information.": "显示 LiquidBounce 品牌与客户端信息。"
+}

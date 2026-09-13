@@ -1,0 +1,16 @@
+{
+ "ABORT": "中止",
+ "PAUSE": "暂停",
+ "CONTINUE": "继续",
+ "CustomUuid": "自定义UUID",
+ "HorizontalModification": "水平调整",
+ "VerticalModification": "垂直调整",
+ "SigmoidDeceleration": "平滑减速",
+ "SilkTouchHandler": "精准采集处理",
+ "TargetRenderer": "目标渲染",
+ "Legacy2DMode": "旧版2D模式",
+ "MessageProvider": "消息提供",
+ "ModuleSkinChanger": "皮肤更换",
+ "PlayerHider": "玩家隐藏",
+ "Renderer": "渲染"
+}

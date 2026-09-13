@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.lbcn.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "SpaConfigMixin",
+    "StaticResourceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

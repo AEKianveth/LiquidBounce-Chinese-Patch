@@ -1,0 +1,23 @@
+# 第三方依赖（体积大，按 README 说明自行放置，不入库）
+libs/
+# 编译中间产物
+build/classes/
+build/tools/
+build/test/
+build/gen/
+build/ref/
+build/vtest/
+build/*-sources.txt
+build/orig_bundle.js
+build/patched_bundle.js
+# 自测输出
+test/out/
+# 注：build/*.jar 为构建产物，需要入库（用 git add -f 强制添加）
+# resources/zh_all.json 为前端翻译总表（构建时由 tools 生成），一并入库便于直接查阅
+
+# Python 缓存
+__pycache__/
+*.pyc
+# 构建临时清单
+build/sources.txt
+build/tools-sources.txt

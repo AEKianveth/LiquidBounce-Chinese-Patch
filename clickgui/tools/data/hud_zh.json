@@ -1,0 +1,18 @@
+{
+ "ArmorItems": "护甲值",
+ "ArrayList": "模块列表",
+ "BlockCounter": "方块计数",
+ "ClosedCaptions": "字幕",
+ "CraftingInventory": "合成栏",
+ "Effects": "药水效果",
+ "EnderChestInventory": "末影箱",
+ "InventoryStatistics": "物品统计",
+ "KeyBinds": "按键绑定",
+ "Keystrokes": "按键显示",
+ "Notifications": "通知",
+ "Scoreboard": "计分板",
+ "TabGui": "Tab菜单",
+ "Taco": "塔可",
+ "TargetHud": "目标信息",
+ "Watermark": "水印"
+}
