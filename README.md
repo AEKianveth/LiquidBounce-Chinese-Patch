@@ -2,7 +2,7 @@
 
 为 [LiquidBounce](https://github.com/CCBlueX/LiquidBounce) 客户端制作的**简体中文汉化模组**，基于 Fabric，采用「后端逻辑标识符保持英文、只在前端显示出口翻译」的标准 i18n 思路，不改动任何功能逻辑，并与 LiquidBounce 自带的语言设置**双向联动**。
 
-当前发布版本：**4.12.0**　适配：**LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**
+当前发布版本：**4.13.0**　适配：**LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**
 
 ---
 
@@ -37,9 +37,9 @@
 ## 三、安装与使用方法
 
 1. 先安装好 **Fabric Loader**，并确认 `mods` 文件夹内已有 **Fabric API** 与 **Fabric Language Kotlin**，以及 **LiquidBounce 0.40.0** 本体。
-2. 前往本仓库 **`release/`** 目录，下载 `liquidbounce-clickgui-cn-4.12.0.jar`（下载到的若是 `.zip` 压缩包，先解压得到里面的 `.jar`）。
+2. 前往本仓库 **`release/`** 目录，下载 `liquidbounce-clickgui-cn-4.13.0.jar`（下载到的若是 `.zip` 压缩包，先解压得到里面的 `.jar`）。
 3. 把该 `.jar` 放入 Minecraft 的 **`mods`** 文件夹，与 LiquidBounce 并列。
-4. 启动游戏。日志中出现 `[水影汉化-ClickGUI] 已加载 4.12.0 ……` 即代表加载成功。
+4. 启动游戏。日志中出现 `[水影汉化-ClickGUI] 已加载 4.13.0 ……` 即代表加载成功。
 5. 进入游戏后打开 ClickGUI 即为中文界面。
 
 ### 切换中英文

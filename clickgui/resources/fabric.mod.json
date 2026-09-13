@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "id": "lbcn",
-  "version": "4.12.0",
+  "version": "4.13.0",
   "name": "水影中文汉化-ClickGUI",
   "description": "LiquidBounce 0.40.0 中文汉化（ClickGUI前端显示层全汉化，语言切换联动：设置里切英文显示英文、切中文简体显示中文，index.html注入cache-busting确保reload即时生效；列表支持中文搜索；仅保留品牌·服务器·反作弊·代理协议专名；后端逻辑标识符保持英文）",
   "authors": ["AEOSC"],
   "license": "GPL-3.0",
+  "icon": "assets/lbcn/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": ["com.lbcn.LbcnMod"]

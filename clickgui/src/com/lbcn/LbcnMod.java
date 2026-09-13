@@ -21,7 +21,7 @@ public class LbcnMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("[水影汉化-ClickGUI] 已加载 4.12.0：语言切换联动（禁用Ktor资源缓存 + setUrl时间戳导航 + index.html/bundle双层cache-busting）——切英文显英文、切中文简体显中文；StaticResourceMixin实时检测语言patch，SpaConfigMixin透传；ClickGUI前端显示层全汉化，列表支持中文搜索；词条4918，仅保留品牌·服务器·反作弊·代理协议专名；后端逻辑标识符保持英文");
+        LOGGER.info("[水影汉化-ClickGUI] 已加载 4.13.0：语言切换联动（禁用Ktor资源缓存 + setUrl时间戳导航 + index.html/bundle双层cache-busting），含模组图标——切英文显英文、切中文简体显中文；StaticResourceMixin实时检测语言patch，SpaConfigMixin透传；ClickGUI前端显示层全汉化，列表支持中文搜索；词条4918，仅保留品牌·服务器·反作弊·代理协议专名；后端逻辑标识符保持英文");
         new LanguageReloader().register();
     }
 }

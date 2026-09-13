@@ -27,6 +27,7 @@ echo "[build] zh_all.json: $(wc -c < resources/zh_all.json) 字节"
 find src -name '*.java' > build/sources.txt
 "$JAVAC" -encoding UTF-8 --release 25 -cp "$CP" -d "$OUT" @build/sources.txt
 cp resources/fabric.mod.json resources/lbcn.mixins.json resources/zh_all.json "$OUT/"
+[ -d resources/assets ] && cp -r resources/assets "$OUT/assets"
 rm -f "build/$JAR_NAME"
 "$JAR" --create --file "build/$JAR_NAME" -C "$OUT" .
 echo "[build] 完成 -> build/$JAR_NAME"
