@@ -23,16 +23,22 @@ LiquidBounce 的 ClickGUI/HUD/Settings 是内嵌浏览器（CEF）加载的前�
 | `mixin/SpaConfigMixin` | 透传 LiquidBounce 原始 SPA 资源配置（走 classpath 资源路线） |
 | `tools/` | 翻译表生成工具与数据源（`data/` 为人工/自动词表，构建时由 `Export` 生成 `resources/zh_all.json`） |
 
-### 语言切换为什么能即时生效（v4.12.0）
+### 语言切换为什么能即时生效（v4.12.0 / v4.14.0）
 
-Ktor 在 ClassLoader 之上有一层应用级资源缓存 `resourceCache`，会把首次解析到的资源 URL
-按 `类加载器哈希|路径` 永久缓存；若不处理，首次（中文）资源被缓存后，切换语言将不再调用
-资源定位，补丁被完全绕过。`StaticResourceMixin` 让该缓存查询恒为未命中，配合：
+**第一层（v4.12.0）——禁用 Ktor 应用层资源缓存。** Ktor 在 ClassLoader 之上有一层
+应用级资源缓存 `resourceCache`，会把首次解析到的资源 URL 按 `类加载器哈希|路径` 永久缓存；
+若不处理，首次（中文）资源被缓存后，切换语言将不再调用资源定位，补丁被完全绕过。
+`StaticResourceMixin` 让该缓存查询恒为未命中，index.html 每次重新生成、其引用的 bundle
+也带语言参数，保证资源按当前语言实时返回。
 
-- 导航 URL 加时间戳（绕开 CEF 浏览器缓存，且不使用会中止新导航的 forceReload）；
-- index.html 每次重新生成、其引用的 bundle 也带语言与时间戳参数；
-
-从而做到「切英文显英文、切中文显中文」，无需重启。
+**第二层（v4.14.0）——重建世界内的全部独立浏览器。** 进入世界后界面并非只有一个浏览器：
+`ScreenManager.mainBrowser`（全屏/共享界面）、ClickGUI 叠加层（`#/clickgui?static`）、
+HUD 叠加层（`#/hud?static`，`CustomOverlay` 持有独立 Browser）是三个相互独立的实例。
+早期只给主浏览器重新导航，主菜单（仅有主浏览器）能切换，世界内两个叠加层却不被触碰，
+表现为「世界内切语言没反应」。`LanguageReloader` 监听到 `ClientLanguageChangedEvent`
+后，在 MC 主线程调用官方的 `ScreenManager.restart()`，一次性重建主浏览器并
+`ModuleClickGui.invalidate()` / `ModuleHud.reopen()` 重建两个叠加层；叠加第一层的缓存禁用，
+所有新浏览器首次加载即按当前语言取资源，从而主菜单与世界内都能一致切换，无需重启游戏。
 
 ## 构建
 

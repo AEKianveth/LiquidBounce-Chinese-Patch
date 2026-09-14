@@ -4,24 +4,29 @@ import net.ccbluex.liquidbounce.event.EventHook;
 import net.ccbluex.liquidbounce.event.EventListener;
 import net.ccbluex.liquidbounce.event.EventManager;
 import net.ccbluex.liquidbounce.event.events.ClientLanguageChangedEvent;
-import net.ccbluex.liquidbounce.integration.backend.browser.Browser;
 import net.ccbluex.liquidbounce.integration.screen.ScreenManager;
 
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
 /**
- * 监听 LiquidBounce 客户端语言变化，自动重载集成浏览器，使汉化 bundle 按新语言重新加载。
+ * 监听 LiquidBounce 客户端语言变化，重建集成浏览器，使汉化 bundle 按新语言重新加载。
  *
- * 背景：LB 切换语言只发出 ClientLanguageChangedEvent（并经 WebSocket 推给前端），
- * 但前端并不会因此重新下载 bundle.js；而本汉化是对 bundle 的静态补丁，不重新加载就
- * 永远停留在上一种语言。这里在语言变化时给浏览器当前 URL 追加一个每次不同的
- * _lbcn 时间戳参数并 setUrl 强制导航到全新 URL——CEF 对新 URL 不可能命中任何缓存，
- * 必然重新请求 index.html；StaticResourceMixin 每次生成 index.html 时给 bundle 引用
- * 也加上时间戳，确保子资源同样不命中缓存。注意不能紧接着 forceReload：loadURL 是
- * 异步的，forceReload 会取消尚未完成的新导航、转而重载旧 URL，反而命中缓存。
+ * 为什么必须 restart() 而不是只给主浏览器 setUrl（v4.14.0 根因）：
+ * 进入世界后，界面由多个相互独立的浏览器实例分别渲染——
+ *   1) ScreenManager.mainBrowser：全屏/共享界面（设置页等）；
+ *   2) ModuleClickGui 的 standalone/shared screen：ClickGUI（世界内为 #/clickgui?static）；
+ *   3) ModuleHud 的 CustomOverlay：HUD 叠加层（#/hud?static），它持有自己独立的 Browser。
+ * 早期版本只对 mainBrowser setUrl，主菜单下（仅有主浏览器）能切换；但世界内两个叠加层
+ * 浏览器完全不被触碰，于是服务器虽按新语言返回了资源，屏幕上的 ClickGUI/HUD 仍是旧语言。
  *
- * 线程：语言设置经 REST API 在 Ktor 线程改动，而 CEF 浏览器必须在 MC 渲染线程操作，
+ * ScreenManager.restart() 是 LiquidBounce 官方的“重建全部浏览器集成”方法（世界切换时它
+ * 自己也走这条路径）：关闭并重建 mainBrowser、调用 ModuleClickGui.invalidate() 重建
+ * ClickGUI、调用 ModuleHud.reopen() 重建 HUD 叠加层，三步各自 try-catch 不会整体崩溃。
+ * 配合 StaticResourceMixin 对 Ktor 应用层资源缓存的禁用，所有新浏览器首次加载都会按当前
+ * 语言实时 patch，从而主菜单与世界内都能一致切换。
+ *
+ * 线程：语言设置经 REST API 在 Ktor 线程改动，而浏览器必须在 MC 渲染线程操作，
  * 故通过反射 Minecraft.getInstance().execute(...) 调度到主线程（编译期不依赖 MC jar）。
  */
 public class LanguageReloader implements EventListener {
@@ -47,50 +52,22 @@ public class LanguageReloader implements EventListener {
         EventHook<ClientLanguageChangedEvent> hook =
                 new EventHook<>(this, PRIORITY_NORMAL, consumer);
         EventManager.INSTANCE.registerEventHook(ClientLanguageChangedEvent.class, hook);
-        LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 已注册客户端语言切换监听，切换语言将强制导航到带时间戳的新URL（彻底绕缓存）以加载对应语言界面");
+        LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 已注册客户端语言切换监听，切换语言将重建全部集成浏览器（主界面+ClickGUI+HUD叠加层）以加载对应语言");
     }
 
     private void onLanguageChanged(ClientLanguageChangedEvent event) {
         boolean zh = LangDetector.isChinese();
-        LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 检测到客户端语言切换（当前是否中文={}），调度浏览器强制导航……", zh);
+        LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 检测到客户端语言切换（当前是否中文={}），调度重建全部集成浏览器……", zh);
         runOnMainThread(() -> {
             try {
-                ScreenManager sm = ScreenManager.INSTANCE;
-                Browser browser = sm.getMainBrowser();
-                if (browser == null) {
-                    LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 集成浏览器尚未创建，跳过本次重载（界面打开时会按当前语言加载）");
-                    return;
-                }
-                // 最彻底的缓存绕过：给当前 URL 追加一个每次不同的 _lbcn 时间戳参数，
-                // 再 setUrl 强制导航到全新 URL——CEF 对新 URL 不可能命中任何缓存，
-                // 必然重新请求 index.html，StaticResourceMixin 按新语言生成带时间戳的
-                // bundle 引用。不能紧接着 forceReload：loadURL 异步，forceReload 会取消
-                // 尚未完成的新导航、转而重载旧 URL，反而命中缓存。
-                String url = browser.getUrl();
-                String newUrl = appendCacheBuster(url, "_lbcn", Long.toString(System.nanoTime()));
-                browser.setUrl(newUrl);
-                LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 已强制导航到新URL（{}），原URL={} 新URL={}",
-                        zh ? "中文" : "原文", url, newUrl);
+                // 一次性重建主浏览器、ClickGUI、HUD 叠加层，覆盖世界内的全部独立浏览器实例。
+                ScreenManager.INSTANCE.restart();
+                LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 已重建全部集成浏览器（{}），主界面/ClickGUI/HUD 将按该语言重新加载",
+                        zh ? "中文" : "原文");
             } catch (Throwable t) {
-                LbcnMod.LOGGER.warn("[水影汉化-ClickGUI] 语言切换后强制导航浏览器失败: {}", t.toString());
+                LbcnMod.LOGGER.warn("[水影汉化-ClickGUI] 语言切换后重建集成浏览器失败: {}", t.toString());
             }
         });
-    }
-
-    /** 给 URL 追加/替换 query 参数，保留 hash 部分。 */
-    private static String appendCacheBuster(String url, String key, String value) {
-        if (url == null || url.isEmpty()) return url;
-        String base = url;
-        String hash = "";
-        int hashIdx = url.indexOf('#');
-        if (hashIdx >= 0) {
-            base = url.substring(0, hashIdx);
-            hash = url.substring(hashIdx);
-        }
-        // 移除已有的同名参数，避免叠加
-        base = base.replaceAll("[?&]" + key + "=[^&]*", "");
-        String sep = base.contains("?") ? "&" : "?";
-        return base + sep + key + "=" + value + hash;
     }
 
     /** 反射调用 Minecraft.getInstance().execute(Runnable)，把任务切到 MC 渲染线程。 */
