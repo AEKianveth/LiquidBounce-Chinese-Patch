@@ -27,7 +27,7 @@ public class Export {
 
         // 1) 自动补漏表（优先级最低）
         Type mt = new TypeToken<TreeMap<String, String>>(){}.getType();
-        for (String res : new String[]{"tools/data/auto_zh.json", "tools/data/geo_zh.json", "tools/data/enum_zh.json", "tools/data/enum_extra_zh.json", "tools/data/hud_zh.json", "tools/data/hud_extra_zh.json", "tools/data/hud_desc_zh.json", "tools/data/sound_zh.json", "tools/data/group_zh.json", "tools/data/spaced_zh.json", "tools/data/packet_zh.json", "tools/data/base_zh.json"}) {
+        for (String res : new String[]{"tools/data/lang_zh.json", "tools/data/lang_manual_zh.json", "tools/data/auto_zh.json", "tools/data/geo_zh.json", "tools/data/enum_zh.json", "tools/data/enum_extra_zh.json", "tools/data/hud_zh.json", "tools/data/hud_extra_zh.json", "tools/data/hud_desc_zh.json", "tools/data/sound_zh.json", "tools/data/group_zh.json", "tools/data/spaced_zh.json", "tools/data/packet_zh.json", "tools/data/base_zh.json"}) {
             Path p = Path.of(res);
             if (Files.exists(p)) {
                 Map<String, String> m = new GsonBuilder().create()

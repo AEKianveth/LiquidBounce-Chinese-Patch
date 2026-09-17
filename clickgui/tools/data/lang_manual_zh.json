@@ -1,0 +1,12 @@
+{
+  "Automatically attacks enemies using a charged spear.": "使用蓄力的长矛自动攻击敌人。",
+  "Jwt Token": "JWT 令牌",
+  "JwtToken": "JWT 令牌",
+  "Please use 1.8.x as protocol for this tower to work.": "请使用 1.8.x 协议版本，此搭路塔才能生效。",
+  "This tower only works only when standing still.": "此搭路塔仅在静止站立时生效。",
+  "Public Key: %s": "公钥：%s",
+  "Payload Channels: [%s]": "载荷通道：[%s]",
+  "Transactions: [%s]": "事务：[%s]",
+  "Transaction Differences: [%s]": "事务差异：[%s]",
+  "Failed to add HUD component": "添加 HUD 组件失败"
+}

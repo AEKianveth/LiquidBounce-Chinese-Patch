@@ -21,8 +21,9 @@ public final class BundlePatcher {
     static final String QT_OLD =
             "function qt(e){const t=/[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;return e.match(t).join(\" \")}";
     static final String QT_NEW =
-            "function qt(e){e=globalThis.__zh(e);const t=/[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;"
-          + "const m=e.match(t);return m?globalThis.__zh(m.join(\" \")):e}";
+            "function qt(e){const z=globalThis.__zh(e);if(z!==e)return z;"
+          + "const t=/[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;const m=e.match(t);"
+          + "return m?globalThis.__zh(m.join(\" \")):e}";
 
     // COND?qt(EXPR):EXPR —— 两侧 EXPR 完全相同（反向引用 2）才归一为 qt(EXPR)，保证不误伤
     private static final Pattern RE_TERNARY = Pattern.compile(
@@ -121,6 +122,12 @@ public final class BundlePatcher {
     // HUD 已放置组件的 description tooltip（第二出口，与 Add Component 列表描述不同）
     static final String HUD_DESC2_OLD = "description svelte-1n35ikq\",null,p,w),ft(b,l(n).description)";
     static final String HUD_DESC2_ZH = "description svelte-1n35ikq\",null,p,w),ft(b,globalThis.__zh(l(n).description))";
+    // 模块列表项悬停 tooltip：描述源头（先翻译基础描述，再拼接 “(aka 别名)”，避免整句失配）
+    static final String MOD_DESC_OLD = "let I=u()";
+    static final String MOD_DESC_ZH = "let I=globalThis.__zh(u())";
+    // 通用 Tooltip 组件统一文本出口 ft(m,n())：兜底所有经 Tooltip 显示的英文（模块描述/按钮提示等）
+    static final String TIPTEXT_OLD = "ft(m,n())";
+    static final String TIPTEXT_ZH = "ft(m,globalThis.__zh(n()))";
 
     // 主菜单 / 账户(AltManager) / 多人服务器 / 代理 等界面的固定显示文案。
     // 全部带 title:/text:/alt= 等“显示属性”前缀，只改渲染文本，不碰任何逻辑值。
@@ -361,6 +368,8 @@ public final class BundlePatcher {
         body = body.replace(TABBTN_OLD, TABBTN_ZH);
         body = body.replace(SETTITLE_OLD, SETTITLE_ZH);
         body = body.replace(HUD_DESC2_OLD, HUD_DESC2_ZH);
+        body = body.replace(MOD_DESC_OLD, MOD_DESC_ZH);
+        body = body.replace(TIPTEXT_OLD, TIPTEXT_ZH);
 
         // 6c) 主菜单 / 账户 / 多人 / 代理 / HUD 等界面固定文案
         for (String[] u : UI_STRINGS) body = body.replace(u[0], u[1]);

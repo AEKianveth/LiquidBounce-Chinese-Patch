@@ -21,7 +21,7 @@ public class LbcnMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("[水影汉化-ClickGUI] 已加载 4.14.0：语言切换联动（禁用Ktor资源缓存 + restart重建主界面/ClickGUI/HUD全部浏览器，主菜单与世界内均可切换），含模组图标——切英文显英文、切中文简体显中文；StaticResourceMixin实时检测语言patch，SpaConfigMixin透传；ClickGUI前端显示层全汉化，列表支持中文搜索；词条4918，仅保留品牌·服务器·反作弊·代理协议专名；后端逻辑标识符保持英文");
+        LOGGER.info("[水影汉化-ClickGUI] 已加载 4.15.0：补全模块/组件/设置项描述(tooltip)汉化（引入官方zh_cn语言库，词条5637；新增模块悬停tooltip翻译出口，含小地图等原生HUD组件描述）；语言切换联动（禁用Ktor资源缓存 + restart重建主界面/ClickGUI/HUD全部浏览器，主菜单与世界内均可切换），含模组图标——切英文显英文、切中文简体显中文；StaticResourceMixin实时检测语言patch，SpaConfigMixin透传；ClickGUI前端显示层全汉化，列表支持中文搜索；仅保留品牌·服务器·反作弊·代理协议专名；后端逻辑标识符保持英文");
         new LanguageReloader().register();
     }
 }
