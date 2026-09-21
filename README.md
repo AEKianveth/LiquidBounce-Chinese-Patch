@@ -2,7 +2,7 @@
 
 为 [LiquidBounce](https://github.com/CCBlueX/LiquidBounce) 客户端制作的**简体中文汉化模组**，基于 Fabric，采用「后端逻辑标识符保持英文、只在前端显示出口翻译」的标准 i18n 思路，不改动任何功能逻辑，并与 LiquidBounce 自带的语言设置**双向联动**。
 
-当前发布版本：**4.15.0**　适配：**LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**
+当前发布版本：**4.16.0**　适配：**LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**
 
 ---
 
@@ -13,7 +13,7 @@
 - **语言切换联动**：在 LiquidBounce 设置中切换语言时实时生效——
   - 选择「简体中文 / 繁體中文」→ 界面显示中文；
   - 选择「English (US)」等英文语言 → 界面恢复为英文原版。
-  - 无需重启游戏。
+  - 无需重启游戏，切换后**停留在当前页面**（例如在「设置」页切换不会被弹回 ClickGUI 主页）。
 - **不影响功能**：仅替换前端显示文本，模块、事件、配置、指令等内部标识符全程保持英文，存档与配置兼容性不受影响。
 - 翻译总表约 **5600+ 条**，覆盖 ClickGUI 显示层与模块/组件描述；品牌名、服务器名、反作弊/代理协议等专有名词按惯例保留英文原文（详见下方「不翻译清单」）。
 
@@ -66,9 +66,9 @@ Enter、Escape、Tab、Home 等——前端用 `key === "Enter"` 做按键逻辑
 ## 三、安装与使用方法
 
 1. 先安装好 **Fabric Loader**，并确认 `mods` 文件夹内已有 **Fabric API** 与 **Fabric Language Kotlin**，以及 **LiquidBounce 0.40.0** 本体。
-2. 前往本仓库 **`release/`** 目录，下载 `liquidbounce-clickgui-cn-4.15.0.jar`（下载到的若是 `.zip` 压缩包，先解压得到里面的 `.jar`）。
+2. 前往本仓库 **`release/`** 目录，下载 `liquidbounce-clickgui-cn-4.16.0.jar`（下载到的若是 `.zip` 压缩包，先解压得到里面的 `.jar`）。
 3. 把该 `.jar` 放入 Minecraft 的 **`mods`** 文件夹，与 LiquidBounce 并列。
-4. 启动游戏。日志中出现 `[水影汉化-ClickGUI] 已加载 4.15.0 ……` 即代表加载成功。
+4. 启动游戏。日志中出现 `[水影汉化-ClickGUI] 已加载 4.16.0 ……` 即代表加载成功。
 5. 进入游戏后打开 ClickGUI 即为中文界面。
 
 ### 切换中英文
@@ -83,7 +83,7 @@ Enter、Escape、Tab、Home 等——前端用 `key === "Enter"` 做按键逻辑
 ```
 .
 ├── README.md                  # 本说明
-├── LICENSE                    # MIT
+├── LICENSE                    # GPL-3.0
 ├── release/                   # 已构建的发布模组 jar
 └── clickgui/                  # 汉化模组源码工程
     ├── build.sh               # 纯 javac 构建脚本（无需 Gradle）
@@ -124,8 +124,9 @@ LiquidBounce 的 ClickGUI/HUD/Settings 是内嵌浏览器（CEF）加载的前�
 
 ---
 
-## 六、说明与免责
+## 六、开源协议与免责
 
-- 本项目为第三方民间汉化，与 LiquidBounce / CCBlueX 官方无隶属关系；相关商标、品牌归各自所有者所有。
+- 本项目采用 **GNU General Public License v3.0（GPL-3.0）** 开源，完整协议见 [LICENSE](LICENSE)。
+- 本项目为第三方民间汉化，与 LiquidBounce / CCBlueX 官方无隶属关系；相关商标、品牌归各自所有者所有。LiquidBounce 本体协议以其官方仓库为准。
 - 汉化仅用于学习交流，请遵守 LiquidBounce 所在服务器的规则与当地法律法规。
-- 如遇界面仍有少量英文或显示异常，可提交 Issue 并附上游戏版本、截图与日志。
+- 如遇界面仍有少量英文或显示异常，可提交 [Issue](https://github.com/aeosc/LiquidBounce-Chinese-Patch/issues) 并附上游戏版本、截图与日志。

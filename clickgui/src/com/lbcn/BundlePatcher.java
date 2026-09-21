@@ -129,6 +129,17 @@ public final class BundlePatcher {
     static final String TIPTEXT_OLD = "ft(m,n())";
     static final String TIPTEXT_ZH = "ft(m,globalThis.__zh(n()))";
 
+    // —— 语言无关的界面行为补丁（中英文 bundle 都应用，见 applyBehavior）——
+    // 顶部三标签页（ClickGUI / HUD编辑器 / 设置）当前标签记忆。
+    // qC 组件的 activeTab 是纯内存状态（初始恒为 0=ClickGUI），浏览器因切换语言被 restart
+    // 重建后组件重新挂载、activeTab 归零，导致用户在“设置”页切语言后被弹回 ClickGUI 主页。
+    // 改用 localStorage 记住当前标签（与官方 altmanager_add_account_active_tab、clickgui.panel.*
+    // 同一套持久化机制 Zn，JCEF 重建浏览器后 localStorage 仍保留），挂载时恢复。
+    static final String TAB_INIT_OLD = "title:\"Settings\",content:MC}];let s=Oe(0),o=Oe(2),c=Oe(1);";
+    static final String TAB_INIT_NEW = "title:\"Settings\",content:MC}];let s=Oe((function(){try{var __t=parseInt(localStorage.getItem(\"clickgui_top_active_tab\")??\"0\");return(__t>=0&&__t<=2)?__t:0}catch(__e){return 0}})()),o=Oe(2),c=Oe(1);";
+    static final String TAB_SET_OLD = "get activeTab(){return l(s)},set activeTab(v){S(s,v,!0)}";
+    static final String TAB_SET_NEW = "get activeTab(){return l(s)},set activeTab(v){S(s,v,!0);try{Zn(\"clickgui_top_active_tab\",String(v))}catch(__e){}}";
+
     // 主菜单 / 账户(AltManager) / 多人服务器 / 代理 等界面的固定显示文案。
     // 全部带 title:/text:/alt= 等“显示属性”前缀，只改渲染文本，不碰任何逻辑值。
     // 品牌专名（LiquidBounce/Microsoft/Mojang/GitHub/Discord/Twitter/YouTube/TheAltening/
@@ -371,6 +382,9 @@ public final class BundlePatcher {
         body = body.replace(MOD_DESC_OLD, MOD_DESC_ZH);
         body = body.replace(TIPTEXT_OLD, TIPTEXT_ZH);
 
+        // 8) 语言无关的界面行为补丁（顶部标签记忆等），中英文 bundle 保持一致
+        body = applyBehavior(body);
+
         // 6c) 主菜单 / 账户 / 多人 / 代理 / HUD 等界面固定文案
         for (String[] u : UI_STRINGS) body = body.replace(u[0], u[1]);
 
@@ -378,5 +392,24 @@ public final class BundlePatcher {
         body = body.replace(ARROW_OLD, ARROW_NEW);
 
         return out.append(body).toString();
+    }
+
+    /**
+     * 语言无关的界面行为补丁（不注入任何翻译文本）。
+     * 中文 patch 与英文原始 bundle 都要应用，保证两种语言下界面行为一致。
+     * 目前只包含：ClickGUI 顶部三标签页（ClickGUI/HUD编辑器/设置）当前标签记忆，
+     * 使浏览器因切换语言 restart 重建后仍停留在原标签页，而不是被弹回 ClickGUI 主页。
+     */
+    public static String applyBehavior(String js) {
+        String body = js;
+        body = body.replace(TAB_INIT_OLD, TAB_INIT_NEW);
+        body = body.replace(TAB_SET_OLD, TAB_SET_NEW);
+        return body;
+    }
+
+    /** 英文（原始）bundle 仅应用语言无关的行为补丁，不做任何汉化。 */
+    public static String patchBehavior(String js) {
+        if (!isMainBundle(js)) return js;
+        return applyBehavior(js);
     }
 }

@@ -135,17 +135,22 @@ public class StaticResourceMixin {
                 return Collections.enumeration(out);
             }
 
-            // 2) 非中文：JS 与其它资源一律原样返回
-            if (!zh || !name.endsWith(".js")) {
+            // 2) 非 JS 资源一律原样返回
+            if (!name.endsWith(".js")) {
                 return Collections.enumeration(urls);
             }
 
-            // 3) 中文 JS：patch 主 bundle
-            String table = ZhTable.json();
-            if (table == null) return Collections.enumeration(urls);
-
+            // 3) JS 主 bundle：
+            //    中文 = 翻译补丁 + 语言无关行为补丁；英文 = 仅语言无关行为补丁（顶部标签记忆等）。
+            //    英文也必须 patch，否则在“设置”页切到英文、浏览器 restart 重建后会弹回 ClickGUI 主页。
             List<URL> out = new ArrayList<>(urls.size());
-            for (URL u : urls) out.add(lbcn$patchIfMain(name, u, table, lang));
+            if (zh) {
+                String table = ZhTable.json();
+                if (table == null) return Collections.enumeration(urls);
+                for (URL u : urls) out.add(lbcn$patchIfMain(name, u, table, lang));
+            } else {
+                for (URL u : urls) out.add(lbcn$patchBehaviorIfMain(name, u, lang));
+            }
             return Collections.enumeration(out);
         } catch (Throwable t) {
             LbcnMod.LOGGER.warn("[水影汉化-ClickGUI] 资源重定向异常，回退原始资源 {}: {}", name, t.toString());
@@ -212,6 +217,37 @@ public class StaticResourceMixin {
             return fileUrl;
         } catch (Throwable t) {
             LbcnMod.LOGGER.warn("[水影汉化-ClickGUI] 补丁主 bundle 失败，回退原始 URL {}: {}", name, t.toString());
+            return url;
+        }
+    }
+
+    /**
+     * 英文（原始）bundle 仅应用语言无关的行为补丁（{@link BundlePatcher#patchBehavior}），
+     * 不注入任何翻译。用于让英文界面同样具备顶部标签记忆等行为修复。
+     */
+    private static URL lbcn$patchBehaviorIfMain(String name, URL url, String lang) {
+        try {
+            String cacheKey = name + "|behavior|" + lang;
+            URL cached = PATCHED.get(cacheKey);
+            if (cached != null) return cached;
+
+            byte[] bytes;
+            try (InputStream in = url.openStream()) {
+                bytes = in.readAllBytes();
+            }
+            String js = new String(bytes, StandardCharsets.UTF_8);
+            if (!BundlePatcher.isMainBundle(js)) return url;
+
+            String patched = BundlePatcher.patchBehavior(js);
+            if (patched.equals(js)) return url; // 行为补丁未命中任何锚点，直接用原始资源
+            Path file = lbcn$writeTemp("bundle-behavior.js", patched.getBytes(StandardCharsets.UTF_8));
+            URL fileUrl = file.toUri().toURL();
+            PATCHED.put(cacheKey, fileUrl);
+            LbcnMod.LOGGER.info("[水影汉化-ClickGUI] 英文主 bundle 已应用语言无关行为补丁（{} 字节 -> {} 字节，语言={}）",
+                    name, bytes.length, patched.length(), lang);
+            return fileUrl;
+        } catch (Throwable t) {
+            LbcnMod.LOGGER.warn("[水影汉化-ClickGUI] 行为补丁主 bundle 失败，回退原始 URL {}: {}", name, t.toString());
             return url;
         }
     }
