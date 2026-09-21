@@ -10,7 +10,7 @@
     "sources": "https://github.com/aeosc/LiquidBounce-Chinese-Patch",
     "issues": "https://github.com/aeosc/LiquidBounce-Chinese-Patch/issues"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "icon": "assets/lbcn/icon.png",
   "environment": "client",
   "entrypoints": {
