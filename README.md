@@ -1,54 +1,46 @@
 # LiquidBounce-Chinese-Patch（水影中文汉化）
 
-为 [LiquidBounce](https://github.com/CCBlueX/LiquidBounce) 客户端制作的**简体中文汉化模组**，基于 Fabric，采用「后端逻辑标识符保持英文、只在前端显示出口翻译」的标准 i18n 思路，不改动任何功能逻辑，并与 LiquidBounce 自带的语言设置**双向联动**。
+给 [LiquidBounce](https://github.com/CCBlueX/LiquidBounce) 客户端做的简体中文汉化，打包成了一个 Fabric 模组，丢进 mods 文件夹就能用。
 
-当前发布版本：**4.16.0**　适配：**LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**
+只翻界面上看得到的文字，模块名、指令、配置键这些内部标识一律保持英文，所以不影响功能，也不动存档。语言跟游戏设置走：在 LiquidBounce 设置里选中文就显示中文，选回英文就恢复原版，不用重启游戏。
 
----
+当前版本 **4.16.0**，对应 **LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**。
 
-## 一、功能特性
+## 都翻了哪些地方
 
-- **ClickGUI 界面全汉化**：模块名称、功能分类、模块设置项、设置组、子模式、枚举取值、HUD 组件名称与描述等前端显示文字全部翻译为简体中文。
-- **中文搜索**：在 ClickGUI 搜索栏可直接用中文搜索模块（例如输入「自瞄」「搭桥」即可定位对应模块），同时保留英文搜索。
-- **语言切换联动**：在 LiquidBounce 设置中切换语言时实时生效——
-  - 选择「简体中文 / 繁體中文」→ 界面显示中文；
-  - 选择「English (US)」等英文语言 → 界面恢复为英文原版。
-  - 无需重启游戏，切换后**停留在当前页面**（例如在「设置」页切换不会被弹回 ClickGUI 主页）。
-- **不影响功能**：仅替换前端显示文本，模块、事件、配置、指令等内部标识符全程保持英文，存档与配置兼容性不受影响。
-- 翻译总表约 **5600+ 条**，覆盖 ClickGUI 显示层与模块/组件描述；品牌名、服务器名、反作弊/代理协议等专有名词按惯例保留英文原文（详见下方「不翻译清单」）。
+- ClickGUI 里能看到的基本都翻了：模块名、分类、设置项、设置组、子模式、枚举取值，还有 HUD 组件的名字和说明。
+- 搜索框可以直接输中文，比如打「自瞄」「搭桥」就能找到模块，原来的英文搜索也照常能用。
+- 切语言即时生效，而且会停在你当前打开的页面，不会一切就被弹回 ClickGUI 主界面。
+- 翻译表大概 5600 条。品牌名、服务器名、反作弊和网络协议这类专有名词按习惯保留英文，具体哪些、为什么不翻，写在下面。
 
----
+## 哪些英文是故意没翻的
 
-## 不翻译清单（故意保留英文，并非漏译）
+不是漏翻。下面这些翻了反而让人看不懂，或者直接把功能搞坏：
 
-汉化遵循「显示层翻译、逻辑层保留」原则。以下英文属于**专有名词、技术术语或功能依赖标识符**，按惯例保留原文，翻译反而会造成误解或破坏功能：
-
-### 品牌 / 产品 / 软件专名
+**品牌和软件名**
 LiquidBounce、ClickGUI、HUD、Discord、GitHub、Microsoft、Mojang、Twitter / X、YouTube、TheAltening、Realms、ViaFabricPlus、OpenAI、osu!（命中音效名）等。
 
-### 服务器 / 反作弊 / 客户端专名
+**服务器、反作弊、客户端名**
 Hypixel、CubeCraft、Gomme、Mineland、Pika、Sentinel、Sigma、Dortware、Hycraft、Hylex、Grim、NCP、Verus、Intave、Vulcan、Polar、BattleAsya、Funtime、Miniblox、CheatBreaker、Badlion、Lunar、Feather、BungeeCord 等。
 
-### 技术 / 协议 / 标准术语
+**技术和协议术语**
 HTTP、HTTPS、SOCKS5、JWT、UUID、API、IP、DNS、IRC、SSL/TLS、TCP/UDP、URL、JSON、XML、HTML、CSS、WebSocket、Base64、SHA/AES/RSA、NBT、RGB/HSV/HEX、TPS/FPS、Ping、Tick、Unicode、Cookie、Pong 等。
 
-### 键盘按键逻辑值
-Enter、Escape、Tab、Home 等——前端用 `key === "Enter"` 做按键逻辑判断，翻译会导致按键功能失效；实际显示的按键名由 Minecraft 本体本地化提供。
+**键盘按键**
+Enter、Escape、Tab、Home 这些。前端是拿 `key === "Enter"` 这种写法判断按键的，翻了按键就会失灵；游戏里实际显示的按键名由 Minecraft 本体负责本地化。
 
-### 后端逻辑标识符（不可译）
-模块内部 name（如 `killAura`）、选项枚举值、配置键名、指令名——这些是功能匹配与存档兼容的依据，翻译会导致模块开关、设置保存、搜索匹配等功能崩溃。
+**模块内部标识**
+模块的内部 name（比如 `killAura`）、选项枚举值、配置键名、指令名。这些是模块匹配和存档读取的依据，翻了会让开关、保存设置、搜索这些功能出问题。
 
-### 用户不可见的库内部内容
-第三方库（dayjs、flatpickr、chartjs 等）的内部错误提示（如 Invalid date、No dataset found、Missing template）与代码标识符（Object、Map、Set、Event 等），界面不会显示。
+**第三方库内部的东西**
+dayjs、flatpickr、chartjs 这些库自带的报错（Invalid date、No dataset found 之类）和代码标识符（Object、Map、Set、Event），界面上本来就不会显示。
 
-### 日期库数据
-月份、星期、Today/Tomorrow 等（dayjs/flatpickr 内部数据）——ClickGUI 不显示日历/日期选择器，用户不会看到。
+**日期库里的数据**
+月份、星期、Today/Tomorrow 这些。ClickGUI 里没有日历或日期选择器，玩家看不到。
 
-> 如果你认为上述某类也应当中文化，或发现界面上有**不在此清单内的英文**，欢迎提交 Issue 并附截图，我们会评估补充翻译。
+要是你觉得上面哪一类其实也该翻，或者在界面上看到了清单之外的英文，欢迎提 Issue 带上截图，我看着补。
 
----
-
-## 二、运行环境
+## 运行环境
 
 | 项目 | 要求 |
 | --- | --- |
@@ -57,76 +49,68 @@ Enter、Escape、Tab、Home 等——前端用 `key === "Enter"` 做按键逻辑
 | 前置模组 1 | Fabric API（26.2 对应版本） |
 | 前置模组 2 | Fabric Language Kotlin（如 2.4.0） |
 | 目标客户端 | LiquidBounce 0.40.0（Fabric 版） |
-| Java | Java 25（与 LiquidBounce 0.40.0 保持一致） |
+| Java | Java 25（跟 LiquidBounce 0.40.0 保持一致） |
 
-> 启动器不限，PCL2、Plain Craft Launcher、官方启动器等均可。
+启动器无所谓，PCL2、Plain Craft Launcher、官方启动器都行。
 
----
+## 安装
 
-## 三、安装与使用方法
-
-1. 先安装好 **Fabric Loader**，并确认 `mods` 文件夹内已有 **Fabric API** 与 **Fabric Language Kotlin**，以及 **LiquidBounce 0.40.0** 本体。
-2. 前往本仓库 **`release/`** 目录，下载 `liquidbounce-clickgui-cn-4.16.0.jar`（下载到的若是 `.zip` 压缩包，先解压得到里面的 `.jar`）。
-3. 把该 `.jar` 放入 Minecraft 的 **`mods`** 文件夹，与 LiquidBounce 并列。
-4. 启动游戏。日志中出现 `[水影汉化-ClickGUI] 已加载 4.16.0 ……` 即代表加载成功。
-5. 进入游戏后打开 ClickGUI 即为中文界面。
+1. 先装好 Fabric Loader，确认 mods 文件夹里已经有 Fabric API、Fabric Language Kotlin 和 LiquidBounce 0.40.0 本体。
+2. 在本仓库 `release/` 目录（或 Releases 页面）下载 `liquidbounce-clickgui-cn-4.16.0.jar`。如果拿到的是 `.zip`，先解压出里面的 `.jar`。
+3. 把 jar 放进 Minecraft 的 `mods` 文件夹，跟 LiquidBounce 放一起。
+4. 启动游戏，日志里出现 `[水影汉化-ClickGUI] 已加载 4.16.0 ……` 就是装好了。
+5. 进游戏打开 ClickGUI，看到的就是中文。
 
 ### 切换中英文
 
-- 在 LiquidBounce 的 **Settings（设置）→ 语言** 中选择「简体中文」显示中文，选择「English (US)」显示英文，切换即时生效。
-- 若游戏语言设置为「自动」，模组会跟随 Minecraft 客户端语言：客户端为中文时显示中文，否则显示英文。
+在 LiquidBounce 的 Settings（设置）→ 语言里选「简体中文」显示中文，选「English (US)」显示英文，切完立刻生效。
+如果游戏语言设成「自动」，模组会跟着 Minecraft 客户端语言走：客户端是中文就显示中文，否则显示英文。
 
----
-
-## 四、目录结构（源码）
+## 源码目录
 
 ```
 .
 ├── README.md                  # 本说明
 ├── LICENSE                    # MIT
-├── release/                   # 已构建的发布模组 jar
-└── clickgui/                  # 汉化模组源码工程
-    ├── build.sh               # 纯 javac 构建脚本（无需 Gradle）
+├── release/                   # 构建好的发布 jar
+└── clickgui/                  # 模组源码工程
+    ├── build.sh               # 纯 javac 构建脚本（不用 Gradle）
     ├── resources/
     │   ├── fabric.mod.json    # Fabric 模组描述
     │   ├── lbcn.mixins.json   # Mixin 配置
-    │   └── zh_all.json        # 前端翻译总表（约4900+条）
+    │   └── zh_all.json        # 前端翻译总表（约 5600 条）
     ├── src/com/lbcn/
     │   ├── LbcnMod.java       # 模组入口
-    │   ├── LanguageReloader.java  # 监听语言切换并驱动界面重载
+    │   ├── LanguageReloader.java  # 监听语言切换、驱动界面重载
     │   ├── BundlePatcher.java / ThemePatcher.java / ZhTable.java / LangDetector.java
     │   └── mixin/             # 织入 LiquidBounce / Ktor 的 Mixin
-    ├── tools/                 # 翻译表生成工具与数据源（data/、autogen/）
+    ├── tools/                 # 翻译表生成工具和数据源（data/、autogen/）
     └── test/                  # 自测
 ```
 
-### 从源码构建
+### 自己构建
 
 ```bash
 cd clickgui
-# 1) 在 libs/ 目录放入构建依赖（LiquidBounce 及其 Fabric/Ktor 等依赖 jar）
-# 2) 使用 JDK 25 执行
+# 1) 把构建依赖（LiquidBounce 及其 Fabric/Ktor 等 jar）放进 libs/
+# 2) 用 JDK 25 执行
 JAVA_HOME=/path/to/jdk-25 bash build.sh
-# 产物：build/liquidbounce-clickgui-cn-1.0.0.jar
+# 产物在 build/liquidbounce-clickgui-cn-1.0.0.jar
 ```
 
----
+## 大概是怎么实现的
 
-## 五、实现原理（简述）
+LiquidBounce 的 ClickGUI、HUD、Settings 其实是内嵌浏览器（CEF）加载的网页，资源由它自带的 Ktor 服务器提供。模组用 Mixin 做了几件事：
 
-LiquidBounce 的 ClickGUI/HUD/Settings 是内嵌浏览器（CEF）加载的前端页面，由内置 Ktor 服务器提供静态资源。模组通过 Mixin：
+1. 让 Ktor 别缓存前端资源，保证每次都按当前语言重新取；
+2. 按当前语言处理主页和 JS：中文就把翻译表注进去，英文保持原样，再让浏览器立刻刷新；
+3. 监听语言切换事件，切回主线程让内嵌页面重新加载对应语言的资源。
 
-1. 在 Ktor 解析前端资源时**禁用其应用层资源缓存**，保证每次都按当前语言重新解析；
-2. 对主页面 `index.html` 与主脚本 bundle 按当前语言实时处理——中文注入翻译表，英文返回原版，并通过 cache-busting 让浏览器即时刷新；
-3. 监听 LiquidBounce 的语言变更事件，在主线程驱动内嵌页面重新导航到对应语言资源。
+这样切语言不用重启，中英文都能即时换。当前停在哪个标签页（点击界面 / HUD 编辑器 / 设置）会记在浏览器本地，切换语言重建页面后还回到原来那一页。
 
-因此可以做到「切英文显英文、切中文显中文」且不重启。
+## 协议
 
----
-
-## 六、开源协议与免责
-
-- 本项目采用 **MIT License** 开源，完整协议见 [LICENSE](LICENSE)。
-- 本项目为第三方汉化，与 LiquidBounce / CCBlueX 官方无隶属关系；相关商标、品牌归各自所有者所有。LiquidBounce 本体协议以其官方仓库为准。
-- 汉化仅用于学习交流，请遵守 LiquidBounce 所在服务器的规则与当地法律法规。
-- 如遇界面仍有少量英文或显示异常，可提交 [Issue](https://github.com/aeosc/LiquidBounce-Chinese-Patch/issues) 并附上游戏版本、截图与日志。
+- 代码用 MIT 协议开源，全文见 [LICENSE](LICENSE)。
+- 这是第三方汉化，跟 LiquidBounce / CCBlueX 官方没有关系，各自的商标、品牌归各自所有，LiquidBounce 本体协议以它官方仓库为准。
+- 仅供学习交流，使用时请遵守所在服务器的规则和当地法律法规。
+- 碰到没翻到的英文或者显示异常，提 [Issue](https://github.com/aeosc/LiquidBounce-Chinese-Patch/issues) 时带上游戏版本、截图和日志，方便排查。
