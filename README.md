@@ -127,6 +127,6 @@ LiquidBounce 的 ClickGUI/HUD/Settings 是内嵌浏览器（CEF）加载的前�
 ## 六、开源协议与免责
 
 - 本项目采用 **MIT License** 开源，完整协议见 [LICENSE](LICENSE)。
-- 本项目为第三方民间汉化，与 LiquidBounce / CCBlueX 官方无隶属关系；相关商标、品牌归各自所有者所有。LiquidBounce 本体协议以其官方仓库为准。
+- 本项目为第三方汉化，与 LiquidBounce / CCBlueX 官方无隶属关系；相关商标、品牌归各自所有者所有。LiquidBounce 本体协议以其官方仓库为准。
 - 汉化仅用于学习交流，请遵守 LiquidBounce 所在服务器的规则与当地法律法规。
 - 如遇界面仍有少量英文或显示异常，可提交 [Issue](https://github.com/aeosc/LiquidBounce-Chinese-Patch/issues) 并附上游戏版本、截图与日志。
