@@ -4,7 +4,7 @@
 
 只翻界面上看得到的文字，模块名、指令、配置键这些内部标识一律保持英文，所以不影响功能，也不动存档。语言跟游戏设置走：在 LiquidBounce 设置里选中文就显示中文，选回英文就恢复原版，不用重启游戏。
 
-当前版本 **4.16.0**，对应 **LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**。
+当前版本 **4.17.0**，对应 **LiquidBounce 0.40.0 / Minecraft 26.2 / Fabric**。
 
 ## 都翻了哪些地方
 
@@ -56,9 +56,9 @@ dayjs、flatpickr、chartjs 这些库自带的报错（Invalid date、No dataset
 ## 安装
 
 1. 先装好 Fabric Loader，确认 mods 文件夹里已经有 Fabric API、Fabric Language Kotlin 和 LiquidBounce 0.40.0 本体。
-2. 在本仓库 `release/` 目录（或 Releases 页面）下载 `liquidbounce-clickgui-cn-4.16.0.jar`。如果拿到的是 `.zip`，先解压出里面的 `.jar`。
+2. 在本仓库 `release/` 目录（或 Releases 页面）下载 `liquidbounce-clickgui-cn-4.17.0.jar`。如果拿到的是 `.zip`，先解压出里面的 `.jar`。
 3. 把 jar 放进 Minecraft 的 `mods` 文件夹，跟 LiquidBounce 放一起。
-4. 启动游戏，日志里出现 `[水影汉化-ClickGUI] 已加载 4.16.0 ……` 就是装好了。
+4. 启动游戏，日志里出现 `[水影汉化-ClickGUI] 已加载 4.17.0 ……` 就是装好了。
 5. 进游戏打开 ClickGUI，看到的就是中文。
 
 ### 切换中英文
