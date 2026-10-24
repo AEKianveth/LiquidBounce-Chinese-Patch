@@ -23,7 +23,16 @@ public final class BundlePatcher {
     static final String QT_NEW =
             "function qt(e){const z=globalThis.__zh(e);if(z!==e)return z;"
           + "const t=/[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;const m=e.match(t);"
-          + "return m?globalThis.__zh(m.join(\" \")):e}";
+          + "if(!m)return e;const j=m.join(\" \");"
+          + "const z2=globalThis.__zh(j);if(z2!==j)return z2;"
+          // 整串（humanize 前后）都没命中词典时逐词兜底：词典里有的普通词换成中文，
+          // 专名/数字/缩写词典没有则保留。逐词时做大小写归一——humanize 后 token 多为
+          // 首字母大写（Teleport），而词典里这些词常以全大写枚举形式存在（TELEPORT），
+          // 原 token 查不到时再用 toUpperCase 查一次。用于 Vulcan286-Teleport-18 这类
+          // 内部标识 humanize 后夹带的 Teleport/Damage/Flat 等普通英文词。
+          + "return m.map(function(w){var zw=globalThis.__zh(w);if(zw!==w)return zw;"
+          + "var up=w.toUpperCase();if(up!==w){var zu=globalThis.__zh(up);if(zu!==up)return zu;}"
+          + "return w}).join(\" \")}";
 
     // COND?qt(EXPR):EXPR —— 两侧 EXPR 完全相同（反向引用 2）才归一为 qt(EXPR)，保证不误伤
     private static final Pattern RE_TERNARY = Pattern.compile(
